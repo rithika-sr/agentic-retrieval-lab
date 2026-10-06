@@ -1,0 +1,43 @@
+[project]
+name = "arl"
+version = "0.1.0"
+description = "Agentic Retrieval Lab: small-scale study of first-stage retrieval for agentic RAG."
+readme = "README.md"
+requires-python = ">=3.11,<3.12"
+authors = [{ name = "Rithika Sankar Rajeswari" }]
+dependencies = [
+    "anthropic>=1.11.0",
+    "bm25s>=0.3.12",
+    "faiss-cpu>=1.15.1",
+    "ir-datasets>=0.6.3",
+    "matplotlib>=3.11.2",
+    "numpy>=2.4.6",
+    "pandas>=3.0.6",
+    "plotly>=7.1.0",
+    "pydantic>=2.13.5",
+    "python-dotenv>=1.2.4",
+    "pyyaml>=6.0.3",
+    "ranx>=0.3.21",
+    "scikit-learn>=1.9.1",
+    "sentence-transformers>=6.1.0",
+    "streamlit>=1.65.0",
+    "tqdm>=4.70.1",
+]
+
+[build-system]
+requires = ["uv_build>=0.12.23,<0.13"]
+build-backend = "uv_build"
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.4.0",
+    "pytest>=9.1.1",
+    "ruff>=0.16.10",
+]

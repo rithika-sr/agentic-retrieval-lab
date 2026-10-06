@@ -1,0 +1,54 @@
+# Agentic Retrieval Lab — central config. Change values here, not in code.
+project:
+  seed: 42
+
+data:
+  dataset: msmarco-passage/dev/small   # ir_datasets id: 6,980 dev queries + official qrels
+  n_human_queries: 300                 # start with --limit 20 for smoke tests
+
+rewrite:
+  n_support: 3                         # support queries per human query (plus 1 primary)
+
+corpus:
+  mode: pooled_subcorpus               # pooled_subcorpus | full
+  target_size: 200000
+  bm25_pool_depth: 100                 # BM25 top-k over the FULL collection, per query variant
+  random_backfill: true
+
+llm:
+  provider: anthropic                  # anthropic | ollama
+  model: claude-haiku-4-5-20251001
+  ollama_model: llama3.1:8b
+  max_calls_per_run: 30000
+  cache_path: data/cache/llm_cache.sqlite
+  require_confirmation: true
+
+retrievers:
+  bm25:
+    k1: 0.9
+    b: 0.4
+  dense:
+    pool_models:                       # older models: used to build pools/labels
+      - BAAI/bge-small-en-v1.5
+      - intfloat/e5-small-v2
+    holdout_models:                    # newer models: evaluated only, never used for labels
+      - Qwen/Qwen3-Embedding-0.6B
+      - google/embeddinggemma-300m
+    max_seq_length: 256
+    batch_size: 64
+    device: auto                       # auto -> mps if available else cpu
+  top_k: 1000
+
+fusion:
+  rrf_k: 60
+
+judging:
+  pool_depth: 20                       # unlabeled candidates per query sent to the judge
+
+eval:
+  metrics: [recall@100, recall@1000, ndcg@10, mrr@10]
+  primary_metric: recall@100
+
+analyzer:
+  sample_size: 300
+  human_validation_n: 50

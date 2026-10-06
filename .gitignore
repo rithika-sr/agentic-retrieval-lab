@@ -1,0 +1,14 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+data/raw/*
+data/processed/*
+data/cache/*
+!data/**/.gitkeep
+*.npy
+*.faiss
+.ipynb_checkpoints/
+.ruff_cache/
+.pytest_cache/
