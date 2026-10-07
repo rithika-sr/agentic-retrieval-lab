@@ -20,7 +20,7 @@ Rithika — MS Data Analytics Engineering student. Comfortable with Python, pand
     - `docs/FRICTIONAL.md`: decisions, surprises, bugs, limitations (dated).
     - `README.md`: results sections (only real numbers).
     - `docs/SOURCES.md`: any paper, dataset, or model newly used.
-12. **Git:** commit at the end of each milestone with a clear message. Ask before pushing.
+12. **Git:** commit at the end of each milestone with a clear message. Ask before pushing. Never add Co-Authored-By trailers or 'Generated with Claude Code' lines to commits or PR descriptions.
 13. **Code quality:** type hints, small functions, docstrings, `ruff format`, pytest for metrics, fusion, and schemas.
 14. **Apple Silicon:** use `mps` if available, otherwise `cpu`. Report which was used.
 
@@ -45,3 +45,7 @@ Rithika — MS Data Analytics Engineering student. Comfortable with Python, pand
 - `uv sync` — install the environment
 - `uv run pytest` — run tests
 - `uv run ruff format . && uv run ruff check .`
+- `uv run ruff format . && uv run ruff check . && uv run pytest` — full pre-commit check
+- `uv run python scripts/smoke_test.py` — free, offline environment checks (imports, device, BM25, ranx)
+- `uv run python scripts/smoke_test.py --model --api` — also loads bge-small (~134 MB, once) and makes one paid Claude call (~$0.00005)
+- `git push` — upload commits to `origin` (GitHub, private); ask first

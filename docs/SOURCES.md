@@ -12,8 +12,8 @@
 - Reciprocal Rank Fusion (Cormack, Clarke & Buettcher, SIGIR 2009) — via `ranx`
 
 ## Models (add license notes as used)
-- BAAI/bge-small-en-v1.5
+- BAAI/bge-small-en-v1.5 — MIT license; first used in the M0 smoke test (revision `5c38ec7c`)
 - intfloat/e5-small-v2
 - Qwen/Qwen3-Embedding-0.6B
 - google/embeddinggemma-300m (gated)
-- LLM: Claude Haiku 4.5 (Anthropic) or a local Ollama model
+- LLM: Claude Haiku 4.5 (Anthropic) or a local Ollama model — `claude-haiku-4-5-20251001` first called in the M0 smoke test (one call)

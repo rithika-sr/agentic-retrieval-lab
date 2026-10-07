@@ -12,3 +12,4 @@ data/cache/*
 .ipynb_checkpoints/
 .ruff_cache/
 .pytest_cache/
+.claude/settings.local.json
