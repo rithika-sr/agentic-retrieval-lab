@@ -1,0 +1,9 @@
+Dry run (claude-haiku-4-5-20251001): 1200 requests, 0 cached/duplicate -> 1200 API calls
+  est. input tokens:  252,042
+  est. output tokens: 2,400
+  est. cost:          $0.2640
+Type 'yes' to spend this:  primary: leak=172 no_leak=128 unparsed=0
+ support: leak=253 no_leak=647 unparsed=0
+API calls this run: 1200; actual cost $0.2379
+Account rate limits: input-tokens-limit=10000000, output-tokens-limit=2000000, requests-limit=10000, tokens-limit=12000000
+Updated data/processed/queries_agent.jsonl

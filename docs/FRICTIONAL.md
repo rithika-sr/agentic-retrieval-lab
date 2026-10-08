@@ -47,3 +47,34 @@ _Session: 2026-10-05 to 2026-10-07. Numbers below are from console output of the
 - **The bge-small cache folder looked empty (1 MB).** This `huggingface_hub` version stores weights in a shared `~/.cache/huggingface/hub/blobs/` store and symlinks to it. The 134 MB download is there. Cached revision `5c38ec7c`.
 - **HF Hub "unauthenticated requests" warning.** Harmless for public models. `HF_TOKEN` will be needed in M2 for the gated `google/embeddinggemma-300m`.
 - **`ruff format` reported "12 files" when there are only 4 Python files.** Verified with a modification-time check that only `scripts/smoke_test.py` changed (line wrapping); no Markdown was touched. Cause of the count not found.
+
+## 2026-10-07 to 2026-10-08 — M1 part 1: data, LLM client, rewrites, leak judge
+_Numbers from `results/foundation/2026-10-08_rewrites_300/` (summary JSONs + run logs) unless marked as console output. Checkpoints 4–7 (full-collection BM25, subcorpus, final tests/docs) are not done yet._
+
+**Data (checkpoint 1)**
+- `msmarco-passage/dev/small` queries and qrels live **inside** `collectionandqueries.tar.gz` (1.06 GB), so the small dev files cost the full download. ir_datasets saved it at `~/.ir_datasets/msmarco-passage/collectionandqueries.tar.gz` (not a `downloads/` folder, as first stated).
+- 300 queries sampled with seed 42: 317 positives, mean 1.057 / min 1 / max 3 per query (console). Full dev/small: 6,590 / 331 / 51 / 8 queries with 1 / 2 / 3 / 4 positives, mean 1.065. Labels are sparse: expect false negatives.
+- Sampling = sort IDs, shuffle once with the seed, take a prefix, so `--limit 20` is exactly the first 20 of the 300.
+- Positive passage text is **streamed** from the cached archive with ir_datasets' own `TarExtract` + `FixEncoding` (identical text, nothing extracted): 2.78 GB scanned in 182 s at 222 MB peak RAM (console, `/usr/bin/time -l`). The decode/encoding fix is CPU-bound at ~15 MB/s — relevant for the BM25 build.
+
+**LLM client (checkpoint 2)**
+- **Model kept at Haiku 4.5** ($1 / $5 per MTok, checked 2026-10-07) over Haiku 5.5 ($0.10 / $0.50), because Haiku 5.5 rejects non-default `temperature`. Revisit for Exp 1's ~24k judge calls.
+- **anthropic 1.x removed `temperature` from `messages.create()`** (TypeError before any request; nothing billed). The API still accepts it for Haiku 4.5, so it is sent via `extra_body`. A test now checks every argument we send is in the SDK signature.
+- SDK retries disabled; our own backoff honours `retry-after` and logs the error type. Rate limits read from response headers: 10,000 requests/min, 10M input tokens/min. The 4 retries in the first 20-query run were therefore **not** a per-minute request limit (type unknown — logged since). Throttle set to 0.2 s.
+- Dry-run estimates ran 5–30% high (chars/3.5 token estimate and 100-token output guess), as intended.
+
+**Rewrites (checkpoint 3)**
+- Prompt tightened after hand review of 20 (distinct angles; related entity must not be the answer; invented Titanic counter-example, checked absent from our 300). **Leakage did not drop** on the 20 (manual count 4 → 5); the model reuses answers it knows despite the instruction. Angle diversity improved; primaries identical to the human query rose 3 → 5, and some replies had 4 supports.
+- Full 300: 300/300 rewritten, 0 failures, 1,200 agent queries; 293 calls, $0.2244 (`rewrite_run.log`). 15 queries needed the one retry: 11 returned 4 supports, 4 returned **clarifying questions instead of JSON** for truncated/odd MS MARCO queries (e.g. "what are the road c", "unspecific synonym"). Rewrites for truncated queries are the model's guesses.
+- 54/300 primaries are identical to the human query (kept, flagged, as decided). 0 exact or near-duplicate (Jaccard ≥ 0.8) supports.
+- Mean words: human 5.96, primary 6.91, support 6.36.
+- **The retry must be a different prompt**: at temperature 0 with a cache, resending the same request returns the same bad reply. The retry appends the validation error.
+
+**Leak flag — the judge is not usable yet**
+- Judge v1 (question + query only) on the 20 reviewed queries: found 1 of 4 manual leaks (v1 rewrites), 2 of 5 (tightened rewrites), with a false positive (#3 "meaning of the name Nora"). It misses bare-entity leaks ("adonis creed", "xinjiang", "robot patent").
+- Manual labels agreed with Rithika: count #20 "robot patent"; don't count #18; #15 "verapamil" only if the question asks for the generic name; #3 is a judge false positive.
+- Judge v2 (`passage_v2`, per Rithika's spec: question + official passage + query, "contains the specific answer as stated in the passage, even as a bare keyword") on all 1,200: primary 172 leak / 128 not, support 253 / 647; $0.2379 (`leak_judge_run.log`).
+- **v2 fails a negative control** (`leak_judge_sanity.json`): 26 of 54 primaries that are word-for-word identical to the question were flagged, which is impossible by definition. Samples show it flags topic words shared by query and passage (e.g. "Goodland Florida", "Kashi China"). On the first 20 it flags 38/80, agrees with 2 of 5 manual leaks and misses 3. **Do not use `leaks_answer` (passage_v2) in any analysis.** It was not tuned on the 20, per the plan.
+- Next (not done): fix the judge before the held-out labeling, and keep the identical-to-question negative control as an automatic check for any future judge.
+
+**Spend:** ≈ $0.50 total in M1 so far ($0.0129 + $0.0067 + $0.0164 + $0.0048 on the 20-query trials; $0.2244 + $0.2379 on the full run), all from run output.

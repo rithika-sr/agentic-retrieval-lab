@@ -1,0 +1,26 @@
+Dry run (claude-haiku-4-5-20251001): 300 requests, 20 cached/duplicate -> 280 API calls
+  est. input tokens:  128,978
+  est. output tokens: 28,000
+  est. cost:          $0.2690
+Type 'yes' to spend this:   retry fixed 1003210: 1 validation error for Rewrite support   Value error, support must have exactly 3 queries, got 4 [type=value_error, input_value=['abraham lincoln birthpl...president birth origin'], input_type=list]     For further information visit https://errors.pydantic.dev/2.13/v/value_error
+  retry fixed 713134: 1 validation error for Rewrite support   Value error, support must have exactly 3 queries, got 4 [type=value_error, input_value=['efficient market hypoth...l markets stocks bonds'], input_type=list]     For further information visit https://errors.pydantic.dev/2.13/v/value_error
+  retry fixed 770604: 1 validation error for Rewrite support   Value error, support must have exactly 3 queries, got 4 [type=value_error, input_value=['Medicare prospective pa...tion healthcare policy'], input_type=list]     For further information visit https://errors.pydantic.dev/2.13/v/value_error
+  retry fixed 787784: 1 validation error for Rewrite support   Value error, support must have exactly 3 queries, got 4 [type=value_error, input_value=['provocative testing met...ion challenge exposure'], input_type=list]     For further information visit https://errors.pydantic.dev/2.13/v/value_error
+  retry fixed 968004: 1 validation error for Rewrite support   Value error, support must have exactly 3 queries, got 4 [type=value_error, input_value=['history and origins of ... sources documentation'], input_type=list]     For further information visit https://errors.pydantic.dev/2.13/v/value_error
+  retry fixed 802794: 1 validation error for Rewrite support   Value error, support must have exactly 3 queries, got 4 [type=value_error, input_value=['Technology World magazi...ital platform services'], input_type=list]     For further information visit https://errors.pydantic.dev/2.13/v/value_error
+  retry fixed 1089156: no JSON object found in reply
+  retry fixed 1066161: no JSON object found in reply
+  retry fixed 615624: no JSON object found in reply
+  retry fixed 1037662: 1 validation error for Rewrite support   Value error, support must have exactly 3 queries, got 4 [type=value_error, input_value=['lemonade cleanse diet d...lth risks side effects'], input_type=list]     For further information visit https://errors.pydantic.dev/2.13/v/value_error
+  retry fixed 1031054: 1 validation error for Rewrite support   Value error, support must have exactly 3 queries, got 4 [type=value_error, input_value=['coffee lake processor s...st clock frequency GHz'], input_type=list]     For further information visit https://errors.pydantic.dev/2.13/v/value_error
+  retry fixed 1079340: 1 validation error for Rewrite support   Value error, support must have exactly 3 queries, got 4 [type=value_error, input_value=['docket call procedure c...ling arraignment court'], input_type=list]     For further information visit https://errors.pydantic.dev/2.13/v/value_error
+  retry fixed 1086860: no JSON object found in reply
+  retry fixed 1080948: 1 validation error for Rewrite support   Value error, support must have exactly 3 queries, got 4 [type=value_error, input_value=['high histamine foods li...vity symptoms triggers'], input_type=list]     For further information visit https://errors.pydantic.dev/2.13/v/value_error
+  retry fixed 844390: 1 validation error for Rewrite support   Value error, support must have exactly 3 queries, got 4 [type=value_error, input_value=['the one ring hobbit sig...orruption hobbit quest'], input_type=list]     For further information visit https://errors.pydantic.dev/2.13/v/value_error
+
+Rewrote 300/300 queries -> 1200 agent queries; 0 failed
+Exact duplicates (54 total): primary==human=54, support==human=0, support==primary=0, support==support=0
+Near-duplicate supports, Jaccard>=0.8 (0 total): ~human=0, ~primary=0, ~support=0
+API calls this run: 293; tokens in/out: 119,436/20,995; actual cost $0.2244
+Account rate limits: input-tokens-limit=10000000, output-tokens-limit=2000000, requests-limit=10000, tokens-limit=12000000
+Wrote data/processed/queries_agent.jsonl

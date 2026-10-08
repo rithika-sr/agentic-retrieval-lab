@@ -48,4 +48,8 @@ Rithika — MS Data Analytics Engineering student. Comfortable with Python, pand
 - `uv run ruff format . && uv run ruff check . && uv run pytest` — full pre-commit check
 - `uv run python scripts/smoke_test.py` — free, offline environment checks (imports, device, BM25, ranx)
 - `uv run python scripts/smoke_test.py --model --api` — also loads bge-small (~134 MB, once) and makes one paid Claude call (~$0.00005)
+- `uv run python -m arl.data [--limit N]` — sample human queries, write qrels, and stream the positive passages from the cached archive (~3 min; free)
+- `uv run python -m arl.rewrite [--limit N] --dry-run` — estimate rewrite cost; drop `--dry-run` to run (typed `yes`), add `--review` to print rewrites
+- `uv run python -m arl.leak [--limit N] --dry-run` — estimate leak-judge cost; drop `--dry-run` to run (judge v2 currently fails its sanity check — see FRICTIONAL.md)
+- `uv run python scripts/summarize_rewrites.py --run-id <id> [--logs ...]` — write rewrite/leak stats + config to `results/foundation/<id>/` (free, refuses to overwrite)
 - `git push` — upload commits to `origin` (GitHub, private); ask first

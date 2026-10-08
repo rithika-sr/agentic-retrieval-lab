@@ -1,0 +1,49 @@
+{
+  "n_human": 300,
+  "n_agent": 1200,
+  "agent_by_type": {
+    "primary": 300,
+    "support": 900
+  },
+  "n_rewrite_failures": 0,
+  "exact_duplicates": {
+    "primary==human": 54,
+    "support==human": 0,
+    "support==primary": 0,
+    "support==support": 0
+  },
+  "near_duplicate_supports": {},
+  "words": {
+    "human": {
+      "mean": 5.96,
+      "min": 2,
+      "max": 18
+    },
+    "primary": {
+      "mean": 6.91,
+      "min": 3,
+      "max": 13
+    },
+    "support": {
+      "mean": 6.36,
+      "min": 3,
+      "max": 12
+    }
+  },
+  "leak_judge": [
+    "passage_v2"
+  ],
+  "leaks_by_type": {
+    "primary": {
+      "leak": 172,
+      "no_leak": 128,
+      "unparsed": 0
+    },
+    "support": {
+      "leak": 253,
+      "no_leak": 647,
+      "unparsed": 0
+    }
+  },
+  "parents_with_any_leak": 212
+}

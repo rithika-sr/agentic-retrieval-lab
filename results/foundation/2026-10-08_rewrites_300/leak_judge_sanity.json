@@ -1,0 +1,25 @@
+{
+  "leak_judge": "passage_v2",
+  "negative_control": {
+    "description": "primaries identical to the human question (cannot leak by definition)",
+    "n": 54,
+    "flagged_as_leak": 26
+  },
+  "first20_vs_manual": {
+    "note": "manual labels by Claude, confirmed by Rithika on 2026-10-07 (not a held-out set)",
+    "manual_leaks": [
+      "1003210_s2",
+      "1085008_s3",
+      "1085533_s2",
+      "1085967_s2",
+      "985644_s3"
+    ],
+    "judge_flags": 38,
+    "agree": 2,
+    "manual_missed_by_judge": [
+      "1085008_s3",
+      "1085533_s2",
+      "1085967_s2"
+    ]
+  }
+}

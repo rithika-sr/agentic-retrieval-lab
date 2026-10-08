@@ -1,0 +1,64 @@
+# Agentic Retrieval Lab — central config. Change values here, not in code.
+project:
+  seed: 42
+
+data:
+  dataset: msmarco-passage/dev/small   # ir_datasets id: 6,980 dev queries + official qrels
+  n_human_queries: 300                 # start with --limit 20 for smoke tests
+
+rewrite:
+  n_support: 3                         # support queries per human query (plus 1 primary)
+
+corpus:
+  mode: pooled_subcorpus               # pooled_subcorpus | full
+  target_size: 200000
+  bm25_pool_depth: 100                 # BM25 top-k over the FULL collection, per query variant
+  random_backfill: true
+
+llm:
+  provider: anthropic                  # anthropic | ollama
+  model: claude-haiku-4-5-20251001
+  ollama_model: llama3.1:8b
+  max_calls_per_run: 30000
+  cache_path: data/cache/llm_cache.sqlite
+  require_confirmation: true
+  temperature: 0.0                     # 0 = most likely output, for reproducibility
+  max_tokens: 512                      # per-call output cap
+  max_retries: 5                       # backoff retries on rate limits / 5xx / network errors
+  retry_base_delay_s: 1.0              # waits 1, 2, 4, 8, 16 s (+ jitter)
+  min_interval_s: 0.2                  # min gap between requests (<=300/min; account limit 10,000 RPM)
+  chars_per_token: 3.5                 # offline token estimate for dry runs (errs high)
+  # USD per 1M tokens. VERIFY on https://www.anthropic.com/pricing (or the console) before
+  # every paid batch; last checked 2026-10-07. A model missing here blocks the dry run.
+  pricing_usd_per_mtok:
+    claude-haiku-4-5-20251001: {input: 1.00, output: 5.00}
+
+retrievers:
+  bm25:
+    k1: 0.9
+    b: 0.4
+  dense:
+    pool_models:                       # older models: used to build pools/labels
+      - BAAI/bge-small-en-v1.5
+      - intfloat/e5-small-v2
+    holdout_models:                    # newer models: evaluated only, never used for labels
+      - Qwen/Qwen3-Embedding-0.6B
+      - google/embeddinggemma-300m
+    max_seq_length: 256
+    batch_size: 64
+    device: auto                       # auto -> mps if available else cpu
+  top_k: 1000
+
+fusion:
+  rrf_k: 60
+
+judging:
+  pool_depth: 20                       # unlabeled candidates per query sent to the judge
+
+eval:
+  metrics: [recall@100, recall@1000, ndcg@10, mrr@10]
+  primary_metric: recall@100
+
+analyzer:
+  sample_size: 300
+  human_validation_n: 50
