@@ -1,0 +1,52 @@
+{
+  "limit": 500000,
+  "reference_index": "data/processed/bm25_slice500k",
+  "reference_build": {
+    "n_docs": 500000,
+    "vocab_size": 215372,
+    "mean_tokens_per_doc": 37.95,
+    "tokenize_s": 16.3,
+    "index_s": 4.4,
+    "peak_rss_gb_after_tokenize": 0.59,
+    "peak_rss_gb_after_index": 1.08,
+    "k1": 0.9,
+    "b": 0.4,
+    "save_s": 0.1,
+    "peak_rss_gb_final": 1.11
+  },
+  "chunked_build": {
+    "builder": "chunked",
+    "n_docs": 500000,
+    "vocab_size": 215372,
+    "nnz": 14273374,
+    "mean_tokens_per_doc": 37.95,
+    "tokenize_s": 15.6,
+    "index_s": 1.3,
+    "peak_rss_gb_after_tokenize": 0.72,
+    "peak_rss_gb_after_index": 0.99
+  },
+  "arrays": {
+    "data": {
+      "dtype_equal": true,
+      "array_equal": true,
+      "length": 14273374
+    },
+    "indices": {
+      "dtype_equal": true,
+      "array_equal": true,
+      "length": 14273374
+    },
+    "indptr": {
+      "dtype_equal": true,
+      "array_equal": true,
+      "length": 215373
+    }
+  },
+  "vocab_equal": true,
+  "tokenizer_vocab_equal": true,
+  "n_queries": 1500,
+  "top_k": 100,
+  "queries_with_identical_topk_docs": 1500,
+  "topk_scores_max_abs_diff": 0.0,
+  "exact": true
+}

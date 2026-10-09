@@ -255,7 +255,10 @@ def _flags(row: dict[str, Any]) -> str:
         flags.append(f"duplicate of {row['duplicate_of']}")
     if row.get("near_dup_of"):
         flags.append(f"near-dup of {row['near_dup_of']}")
-    if row.get("leaks_answer") is True:
+    if "leaks_answer_v3" in row:  # v3 supersedes the v2 judge in reviews
+        if row["leaks_answer_v3"]:
+            flags.append(f"LEAK v3 {row['leak_tokens']}")
+    elif row.get("leaks_answer") is True:
         flags.append("LEAK")
     elif "leaks_answer" in row and row["leaks_answer"] is None:
         flags.append("leak=unparsed")

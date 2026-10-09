@@ -50,6 +50,13 @@ Rithika — MS Data Analytics Engineering student. Comfortable with Python, pand
 - `uv run python scripts/smoke_test.py --model --api` — also loads bge-small (~134 MB, once) and makes one paid Claude call (~$0.00005)
 - `uv run python -m arl.data [--limit N]` — sample human queries, write qrels, and stream the positive passages from the cached archive (~3 min; free)
 - `uv run python -m arl.rewrite [--limit N] --dry-run` — estimate rewrite cost; drop `--dry-run` to run (typed `yes`), add `--review` to print rewrites
-- `uv run python -m arl.leak [--limit N] --dry-run` — estimate leak-judge cost; drop `--dry-run` to run (judge v2 currently fails its sanity check — see FRICTIONAL.md)
+- `uv run python -m arl.leak [--limit N] --dry-run` — estimate leak-judge cost; drop `--dry-run` to run (judge v2 fails its sanity check — superseded by v3; do not use `leaks_answer`)
+- `uv run python -m arl.answers [--limit N] --dry-run` — estimate answer-extraction cost (one Haiku call per human query); drop `--dry-run` to run (typed `yes`)
+- `uv run python -m arl.leak_v3 [--limit N] [--run-id <id>] [--review]` — free deterministic leak rule v3 + sanity checks; `--run-id` writes `results/foundation/<id>/`
+- `uv run python -m arl.retrievers.bm25 build [--limit N] --out <dir>` — chunked BM25 build (full 8.8M: ~5.5 min, ~3.5 GB peak RAM, 2.0 GB on disk at `data/processed/bm25_full/`)
+- `uv run python scripts/verify_bm25_exact.py --reference <stock index> --limit N --run-id <id>` — check the chunked builder against stock bm25s
+- `uv run python -m arl.pool [--limit N] [--run-id <id>]` — BM25 top-100 over the full collection for every query variant → `data/processed/bm25_full_top100.tsv`
+- `uv run python scripts/pool_breakdown.py --run-id <id>` — primary-vs-human and leak-vs-no-leak pool coverage (free)
+- `uv run python -m arl.corpus [--limit N] [--ids-only] [--run-id <id>]` — build the 200k subcorpus → `data/processed/corpus.jsonl` (~3.5 min stream; free)
 - `uv run python scripts/summarize_rewrites.py --run-id <id> [--logs ...]` — write rewrite/leak stats + config to `results/foundation/<id>/` (free, refuses to overwrite)
 - `git push` — upload commits to `origin` (GitHub, private); ask first

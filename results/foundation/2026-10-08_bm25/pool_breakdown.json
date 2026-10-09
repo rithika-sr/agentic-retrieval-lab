@@ -1,0 +1,21 @@
+{
+  "rewritten_primaries_vs_human": {
+    "note": "only primaries that differ from the human query (identical ones excluded)",
+    "n": 246,
+    "human_hits": 155,
+    "primary_hits": 145,
+    "both": 128,
+    "human_only": 27,
+    "primary_only": 17
+  },
+  "factoid_supports_by_leak_v3": {
+    "true": {
+      "n": 68,
+      "hits": 45
+    },
+    "false": {
+      "n": 298,
+      "hits": 130
+    }
+  }
+}

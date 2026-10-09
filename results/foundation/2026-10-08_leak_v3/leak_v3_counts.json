@@ -1,0 +1,45 @@
+{
+  "n_human_with_answer": 300,
+  "answer_types": {
+    "factoid": 122,
+    "descriptive": 168,
+    "extraction_failed": 10
+  },
+  "parents_with_any_leak": 53,
+  "leaks_by_query_type_and_answer_type": {
+    "primary": {
+      "factoid": {
+        "leak": 5,
+        "no_leak": 117,
+        "not_checkable": 0
+      },
+      "descriptive": {
+        "leak": 0,
+        "no_leak": 0,
+        "not_checkable": 168
+      },
+      "extraction_failed": {
+        "leak": 0,
+        "no_leak": 0,
+        "not_checkable": 10
+      }
+    },
+    "support": {
+      "factoid": {
+        "leak": 68,
+        "no_leak": 298,
+        "not_checkable": 0
+      },
+      "descriptive": {
+        "leak": 0,
+        "no_leak": 0,
+        "not_checkable": 504
+      },
+      "extraction_failed": {
+        "leak": 0,
+        "no_leak": 0,
+        "not_checkable": 30
+      }
+    }
+  }
+}

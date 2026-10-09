@@ -1,0 +1,54 @@
+{
+  "n_human_queries": 300,
+  "n_query_variants": 1500,
+  "pool_slots": 150000,
+  "positives": 317,
+  "positives_in_pools": 243,
+  "unique_pooled_passages": 105120,
+  "pooled_non_positive": 104877,
+  "backfill": 94806,
+  "total": 200000,
+  "target_size": 200000,
+  "seed": 42,
+  "n_collection": 8841823,
+  "pool_overlap_by_query_type": {
+    "size": {
+      "human": 29302,
+      "primary": 27940,
+      "support": 78501
+    },
+    "intersection": {
+      "human&primary": 17564,
+      "human&support": 10721,
+      "primary&support": 10557
+    },
+    "all_types": 8219,
+    "only_this_type": {
+      "human": 9236,
+      "primary": 8038,
+      "support": 65442
+    }
+  },
+  "passage_length": {
+    "all": {
+      "mean_words": 60.59,
+      "median_words": 53.0,
+      "max_words": 266
+    },
+    "positive": {
+      "mean_words": 54.17,
+      "median_words": 50,
+      "max_words": 126
+    },
+    "pool": {
+      "mean_words": 64.64,
+      "median_words": 56,
+      "max_words": 266
+    },
+    "backfill": {
+      "mean_words": 56.13,
+      "median_words": 50.0,
+      "max_words": 204
+    }
+  }
+}

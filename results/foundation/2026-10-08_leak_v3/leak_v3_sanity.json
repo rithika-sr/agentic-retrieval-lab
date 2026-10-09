@@ -1,0 +1,90 @@
+{
+  "leak_rule": "token_v3",
+  "negative_control": {
+    "description": "primaries identical to the human question (cannot leak by definition)",
+    "n": 54,
+    "flagged_as_leak": 0,
+    "flagged_ids": [],
+    "passed": true
+  },
+  "dev20_vs_manual": {
+    "note": "first 20 human queries; hand-reviewed before v3 was written (dev, not test)",
+    "n_agent_queries": 80,
+    "n_not_checkable": 36,
+    "manual_leaks": [
+      "1003210_s2",
+      "1085008_s3",
+      "1085533_s2",
+      "1085967_s2",
+      "985644_s3"
+    ],
+    "caught": [
+      {
+        "query_id": "1003210_s2",
+        "text": "lincoln kentucky hodgenville childhood",
+        "answer": "Hodgenville, Kentucky",
+        "answer_type": "factoid",
+        "leak_tokens": [
+          "hodgenville",
+          "kentucky"
+        ]
+      },
+      {
+        "query_id": "1085533_s2",
+        "text": "rockingham county virginia towns cities",
+        "answer": "Rockingham County",
+        "answer_type": "factoid",
+        "leak_tokens": [
+          "rockingham"
+        ]
+      },
+      {
+        "query_id": "1085967_s2",
+        "text": "adonis creed actor cast",
+        "answer": "Adonis Creed",
+        "answer_type": "factoid",
+        "leak_tokens": [
+          "adonis"
+        ]
+      },
+      {
+        "query_id": "985644_s3",
+        "text": "Kashgar Xinjiang China history significance",
+        "answer": "southwestern Xinjiang Uygur Autonomous Region",
+        "answer_type": "factoid",
+        "leak_tokens": [
+          "xinjiang"
+        ]
+      }
+    ],
+    "missed": [
+      {
+        "query_id": "1085008_s3",
+        "text": "Maria Theresa robot patent feudal obligations serfs",
+        "answer": "Provided Education for Serfs",
+        "answer_type": "factoid",
+        "leak_tokens": []
+      }
+    ],
+    "false_positives": [
+      {
+        "query_id": "1092029_s1",
+        "text": "Mount Kenya elevation meters feet",
+        "answer": "5199 meters",
+        "answer_type": "factoid",
+        "leak_tokens": [
+          "meter"
+        ]
+      },
+      {
+        "query_id": "985644_s2",
+        "text": "what region province is Kashi in",
+        "answer": "southwestern Xinjiang Uygur Autonomous Region",
+        "answer_type": "factoid",
+        "leak_tokens": [
+          "region"
+        ]
+      }
+    ]
+  }
+}

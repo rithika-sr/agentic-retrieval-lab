@@ -1,0 +1,36 @@
+{
+  "index": "data/processed/bm25_full",
+  "n_docs_in_index": 8841823,
+  "pool_depth": 100,
+  "n_variants": 1500,
+  "load_s": 1.1,
+  "search_s": 10.9,
+  "zero_score_rows": 0,
+  "official_positive_in_pool": {
+    "human": {
+      "n": 300,
+      "hits": 191,
+      "rate": 0.6367
+    },
+    "primary": {
+      "n": 300,
+      "hits": 181,
+      "rate": 0.6033
+    },
+    "support": {
+      "n": 900,
+      "hits": 375,
+      "rate": 0.4167
+    },
+    "any_agent_query_per_parent": {
+      "n": 300,
+      "hits": 220,
+      "rate": 0.7333
+    },
+    "any_variant_per_parent": {
+      "n": 300,
+      "hits": 233,
+      "rate": 0.7767
+    }
+  }
+}
