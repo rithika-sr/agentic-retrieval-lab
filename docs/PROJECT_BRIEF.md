@@ -41,7 +41,7 @@ All three run on **one shared foundation**: same corpus, same retrievers, same e
 
 - **Rithika Sankar Rajeswari**, MS in Data Analytics Engineering at Northeastern University (graduating Dec 2026). Currently a Graduate TA for IE 7615 Deep Learning for AI and a peer mentor.
 - Job searching for **Data Science / Data Engineering / ML Engineering / AI Engineering** roles starting **January 2027**. This project is a portfolio piece and the basis of a LinkedIn post series.
-- Previous experience: AI/ML Data Science Intern at Intuitive (Summer 2026). My project there was KB Question Intelligence: clustering and surfacing what users ask an internal RAG assistant. I also contributed **early ideation and literature review only** for a RAG evaluation framework that another team built. **Never overclaim this** in posts, the README, or interview framing. This lab is my own hands-on RAG evaluation work, and that's the honest link between the two.
+- Previous experience: AI/ML Data Science Intern at Intuitive (Summer 2026), where I built a RAG evaluation framework (synthetic test sets, precision/recall, LLM-based evaluation) and clustered 1,100+ production user queries with embeddings, UMAP and HDBSCAN. This lab extends that RAG evaluation work on open data.
 - Workflow I like: Claude.ai for planning and review, Claude Code for execution, living docs updated in place (`README.md`, `FRICTIONAL.md`, `SOURCES.md`), and verifying actual output before writing the next prompt.
 - Machine: MacBook (Apple Silicon assumed; confirm in Milestone 0). No dedicated GPU; Google Colab is available as a fallback.
 
@@ -243,7 +243,7 @@ Today is Mon Oct 5, 2026. Estimates assume focused 2–3 hour sessions.
 | M6 | **Exp 2 v2 + polish** | re-run on deep labels, README, final charts | Oct 24–26 |
 | — | **LinkedIn Post 3** | "Why retrieval fails, and which fix actually helps" | week of Oct 26 |
 
-**Post rules:** numbers only from `results/`; credit the Q2D-Web authors and link the paper; state the scale and that it's a small-scale replication; one clear chart per post; link the repo; no overclaiming about the Intuitive work.
+**Post rules:** numbers only from `results/`; credit the Q2D-Web authors and link the paper; state the scale and that it's a small-scale replication; one clear chart per post; link the repo; describe Intuitive work only using the manager-approved portfolio bullets.
 
 ---
 
