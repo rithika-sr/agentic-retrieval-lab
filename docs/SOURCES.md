@@ -17,10 +17,13 @@
   - Stemming: Snowball English stemmer (M. Porter, *Snowball: A language for stemming algorithms*, 2001) via `PyStemmer` 3.1.0. Stopwords: bm25s's built-in English list.
 - Leak rule v3 stopwords: scikit-learn's `ENGLISH_STOP_WORDS` (318 words; scikit-learn, Pedregosa et al., JMLR 2011). First used 2026-10-08.
 - Reciprocal Rank Fusion (Cormack, Clarke & Buettcher, SIGIR 2009) — via `ranx`
+- Evaluation metrics (2026-11-23, `arl.eval.metrics`, own implementation): Recall@100, MRR@10, and binary nDCG@10 (Järvelin & Kekäläinen, *Cumulated gain-based evaluation of IR techniques*, ACM TOIS 2002). Cross-checked against `ranx` 0.3.21 (E. Bassani, *ranx: A Blazing-Fast Python Library for Ranking Evaluation and Comparison*, ECIR 2022) in a unit test and on the human-query run.
+- Paired bootstrap, percentile interval (Efron & Tibshirani, *An Introduction to the Bootstrap*, 1993): 10,000 resamples of queries, seed 42. First used 2026-11-23.
 
 ## Models (add license notes as used)
-- BAAI/bge-small-en-v1.5 — MIT license; first used in the M0 smoke test (revision `5c38ec7c`)
-- intfloat/e5-small-v2
+- BAAI/bge-small-en-v1.5 — MIT license; first used in the M0 smoke test (revision `5c38ec7c`). Dense retrieval on the subcorpus 2026-11-23 (S. Xiao et al., *C-Pack: Packaged Resources To Advance General Chinese Embedding*, arXiv:2309.07597, 2023); query prefix from the model card.
+- intfloat/e5-small-v2 — MIT license; downloaded and first used 2026-11-23 (L. Wang et al., *Text Embeddings by Weakly-Supervised Contrastive Pre-training*, arXiv:2212.03533, 2022); "query: " / "passage: " prefixes from the model card.
+- Libraries for dense search (2026-11-23): `sentence-transformers` 6.1.0 (Reimers & Gurevych, *Sentence-BERT*, EMNLP 2019), `faiss-cpu` 1.15.1 exact `IndexFlatIP` (Douze et al., *The Faiss library*, arXiv:2401.08281, 2024), torch 2.14.1 on MPS.
 - Qwen/Qwen3-Embedding-0.6B
 - google/embeddinggemma-300m (gated)
 - LLM: Claude Haiku 4.5 (Anthropic) or a local Ollama model — `claude-haiku-4-5-20251001` first called in the M0 smoke test (one call); M1 query rewriting and leak judging (2026-10-07/08); answer extraction for leak rule v3 (2026-10-08)

@@ -1,0 +1,31 @@
+RRF k=60 over bm25 + bge-small-en-v1.5, top 1000 each; 1500 queries
+{
+  "human": {
+    "n": 300,
+    "recall@100": 0.9439,
+    "mrr@10": 0.281,
+    "ndcg@10": 0.329,
+    "positive_in_top1000": 1.0
+  },
+  "primary": {
+    "n": 300,
+    "recall@100": 0.9289,
+    "mrr@10": 0.2437,
+    "ndcg@10": 0.2921,
+    "positive_in_top1000": 1.0
+  },
+  "support": {
+    "n": 900,
+    "recall@100": 0.7419,
+    "mrr@10": 0.1272,
+    "ndcg@10": 0.155,
+    "positive_in_top1000": 0.9822
+  }
+}
+hybrid - bm25 [human]: recall@100 +0.3017 [+0.2500, +0.3533]; mrr@10 +0.1039 [+0.0781, +0.1304]
+hybrid - bm25 [primary]: recall@100 +0.3367 [+0.2850, +0.3900]; mrr@10 +0.0795 [+0.0591, +0.1017]
+hybrid - bm25 [support]: recall@100 +0.3611 [+0.3302, +0.3924]; mrr@10 +0.0453 [+0.0342, +0.0567]
+hybrid - bge-small-en-v1.5 [human]: recall@100 -0.0194 [-0.0394, -0.0011]; mrr@10 -0.1062 [-0.1462, -0.0669]
+hybrid - bge-small-en-v1.5 [primary]: recall@100 -0.0200 [-0.0400, -0.0017]; mrr@10 -0.0970 [-0.1327, -0.0616]
+hybrid - bge-small-en-v1.5 [support]: recall@100 -0.0650 [-0.0839, -0.0467]; mrr@10 -0.0658 [-0.0832, -0.0485]
+wall-clock total: 2.1 s

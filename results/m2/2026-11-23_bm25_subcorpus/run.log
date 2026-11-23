@@ -1,0 +1,57 @@
+BM25 on subcorpus: k1=0.9 b=0.4 top_k=1000 limit=None
+corpus 200,000 passages; 1500 query variants; positives missing from corpus: 0
+index + search: 4.5 s; queries with <100 matching passages: 0
+ranx cross-check (human): recall@100 ours=0.6422 ranx=0.6422, mrr@10 ours=0.1772 ranx=0.1772, ndcg@10 ours=0.2129 ranx=0.2129
+{
+  "human": {
+    "n": 300,
+    "recall@100": 0.6422,
+    "mrr@10": 0.1772,
+    "ndcg@10": 0.2129,
+    "positive_in_top1000": 0.9767
+  },
+  "primary": {
+    "n": 300,
+    "recall@100": 0.5922,
+    "mrr@10": 0.1642,
+    "ndcg@10": 0.1949,
+    "positive_in_top1000": 0.9533
+  },
+  "support": {
+    "n": 900,
+    "recall@100": 0.3807,
+    "mrr@10": 0.0819,
+    "ndcg@10": 0.1011,
+    "positive_in_top1000": 0.8967
+  }
+}
+length check (1.5 s):
+{
+  "description": "Human queries with an official positive in BM25's top 100 on the subcorpus. Candidates re-ranked by word count (shortest first, random tie-breaks) vs a random order; both averaged over 100 seeds per query.",
+  "n_human_queries_total": 300,
+  "n_queries_used": 196,
+  "candidate_depth": 100,
+  "n_seeds": 100,
+  "mrr@10": {
+    "length_only_shorter_first": 0.0483,
+    "random": 0.0277,
+    "bm25_reference": 0.2712
+  },
+  "length_minus_random": {
+    "mean_diff": 0.020640326368642693,
+    "ci_low": 0.003582938532555881,
+    "ci_high": 0.040787687277291866,
+    "n": 196,
+    "n_resamples": 10000,
+    "seed": 42
+  },
+  "mean_words_in_candidate_sets": {
+    "positives": 56.3,
+    "non_positives": 64.47,
+    "median_positives": 50.0,
+    "median_non_positives": 56.0,
+    "n_positives": 203,
+    "n_non_positives": 19397
+  }
+}
+wall-clock total: 9.6 s (load 1.0 s, BM25 index+search 4.5 s)

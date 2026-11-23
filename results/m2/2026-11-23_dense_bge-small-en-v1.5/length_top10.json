@@ -1,0 +1,20 @@
+{
+  "description": "Mean word count of the top-10 passages per human query, then the mean over queries.",
+  "n_queries": 300,
+  "mean_words_top10": {
+    "bm25": 66.3,
+    "BAAI/bge-small-en-v1.5": 56.29
+  },
+  "dense_minus_bm25": {
+    "mean_diff": -10.005999999999998,
+    "ci_low": -11.398375,
+    "ci_high": -8.663591666666669,
+    "n": 300,
+    "n_resamples": 10000,
+    "seed": 42
+  },
+  "reference_mean_words": {
+    "whole_subcorpus": 60.59,
+    "official_positives": 54.17
+  }
+}

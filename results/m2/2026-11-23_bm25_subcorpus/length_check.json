@@ -1,0 +1,28 @@
+{
+  "description": "Human queries with an official positive in BM25's top 100 on the subcorpus. Candidates re-ranked by word count (shortest first, random tie-breaks) vs a random order; both averaged over 100 seeds per query.",
+  "n_human_queries_total": 300,
+  "n_queries_used": 196,
+  "candidate_depth": 100,
+  "n_seeds": 100,
+  "mrr@10": {
+    "length_only_shorter_first": 0.0483,
+    "random": 0.0277,
+    "bm25_reference": 0.2712
+  },
+  "length_minus_random": {
+    "mean_diff": 0.020640326368642693,
+    "ci_low": 0.003582938532555881,
+    "ci_high": 0.040787687277291866,
+    "n": 196,
+    "n_resamples": 10000,
+    "seed": 42
+  },
+  "mean_words_in_candidate_sets": {
+    "positives": 56.3,
+    "non_positives": 64.47,
+    "median_positives": 50.0,
+    "median_non_positives": 56.0,
+    "n_positives": 203,
+    "n_non_positives": 19397
+  }
+}

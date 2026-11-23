@@ -1,0 +1,53 @@
+BAAI/bge-small-en-v1.5 on subcorpus: 200,000 passages, 1500 queries, top_k=1000, limit=None
+BM25 re-run: 5.5 s
+BM25 re-run matches saved results/m2/2026-11-23_bm25_subcorpus/per_query.csv: 1500/1500 queries
+device=mps; model load 4.2 s
+loaded cached passage embeddings /Users/rithika/agentic-retrieval-lab/data/processed/embeddings/bge-small-en-v1.5.npy (441.7 s to build)
+passage embeddings 0.1 s; query encoding 0.9 s; faiss search 0.8 s
+{
+  "human": {
+    "n": 300,
+    "recall@100": 0.9633,
+    "mrr@10": 0.3872,
+    "ndcg@10": 0.4519,
+    "positive_in_top1000": 1.0
+  },
+  "primary": {
+    "n": 300,
+    "recall@100": 0.9489,
+    "mrr@10": 0.3408,
+    "ndcg@10": 0.4116,
+    "positive_in_top1000": 1.0
+  },
+  "support": {
+    "n": 900,
+    "recall@100": 0.8069,
+    "mrr@10": 0.193,
+    "ndcg@10": 0.2401,
+    "positive_in_top1000": 0.9844
+  }
+}
+dense - BM25 [human]: recall@100 +0.3211 [+0.2694, +0.3744]; mrr@10 +0.2100 [+0.1665, +0.2545]
+dense - BM25 [primary]: recall@100 +0.3567 [+0.3033, +0.4117]; mrr@10 +0.1766 [+0.1369, +0.2175]
+dense - BM25 [support]: recall@100 +0.4261 [+0.3937, +0.4593]; mrr@10 +0.1111 [+0.0906, +0.1314]
+{
+  "description": "Mean word count of the top-10 passages per human query, then the mean over queries.",
+  "n_queries": 300,
+  "mean_words_top10": {
+    "bm25": 66.3,
+    "BAAI/bge-small-en-v1.5": 56.29
+  },
+  "dense_minus_bm25": {
+    "mean_diff": -10.005999999999998,
+    "ci_low": -11.398375,
+    "ci_high": -8.663591666666669,
+    "n": 300,
+    "n_resamples": 10000,
+    "seed": 42
+  },
+  "reference_mean_words": {
+    "whole_subcorpus": 60.59,
+    "official_positives": 54.17
+  }
+}
+wall-clock total: 13.1 s

@@ -1,0 +1,95 @@
+{
+  "settings": {
+    "k1": 0.9,
+    "b": 0.4,
+    "top_k": 1000,
+    "limit": null,
+    "corpus": "data/processed/corpus.jsonl",
+    "n_docs": 200000,
+    "qrels": "official MS MARCO dev/small; agent queries use their parent's"
+  },
+  "by_query_type": {
+    "human": {
+      "n": 300,
+      "recall@100": 0.6422,
+      "mrr@10": 0.1772,
+      "ndcg@10": 0.2129,
+      "positive_in_top1000": 0.9767
+    },
+    "primary": {
+      "n": 300,
+      "recall@100": 0.5922,
+      "mrr@10": 0.1642,
+      "ndcg@10": 0.1949,
+      "positive_in_top1000": 0.9533
+    },
+    "support": {
+      "n": 900,
+      "recall@100": 0.3807,
+      "mrr@10": 0.0819,
+      "ndcg@10": 0.1011,
+      "positive_in_top1000": 0.8967
+    }
+  },
+  "paired_differences": {
+    "human_minus_primary": {
+      "recall@100": {
+        "mean_diff": 0.05,
+        "ci_low": 0.006666666666666667,
+        "ci_high": 0.09333333333333334,
+        "n": 300,
+        "n_resamples": 10000,
+        "seed": 42
+      },
+      "mrr@10": {
+        "mean_diff": 0.012992063492063494,
+        "ci_low": -0.007252414021164019,
+        "ci_high": 0.03369880952380952,
+        "n": 300,
+        "n_resamples": 10000,
+        "seed": 42
+      },
+      "ndcg@10": {
+        "mean_diff": 0.018026275140993895,
+        "ci_low": -0.00317716369009854,
+        "ci_high": 0.03961155958297182,
+        "n": 300,
+        "n_resamples": 10000,
+        "seed": 42
+      }
+    },
+    "human_minus_support": {
+      "recall@100": {
+        "mean_diff": 0.26148148148148154,
+        "ci_low": 0.20925462962962965,
+        "ci_high": 0.31444444444444447,
+        "n": 300,
+        "n_resamples": 10000,
+        "seed": 42
+      },
+      "mrr@10": {
+        "mean_diff": 0.09530291005291006,
+        "ci_low": 0.06488363095238095,
+        "ci_high": 0.12762856040564372,
+        "n": 300,
+        "n_resamples": 10000,
+        "seed": 42
+      },
+      "ndcg@10": {
+        "mean_diff": 0.11178178431648655,
+        "ci_low": 0.0804918700233603,
+        "ci_high": 0.14488634254522287,
+        "n": 300,
+        "n_resamples": 10000,
+        "seed": 42
+      }
+    },
+    "note": "paired by parent; support = mean over that parent's 3 support queries"
+  },
+  "queries_with_fewer_than_100_matches": 0,
+  "ranx_cross_check_human": {
+    "recall@100": 0.6422,
+    "mrr@10": 0.1772,
+    "ndcg@10": 0.2129
+  }
+}

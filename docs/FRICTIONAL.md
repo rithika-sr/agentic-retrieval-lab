@@ -35,7 +35,7 @@ _Session: 2026-10-05 to 2026-10-07. Numbers below are from console output of the
 - **Wrote `pyproject.toml` by hand instead of `uv init`.** `uv init --package` would have run `git init` early and tried to create files that already exist. Build backend: `uv_build`.
 - **Smoke test makes paid/large calls opt-in** (`--model`, `--api` flags), so the default run is free and offline.
 - **No Claude attribution in commits/PRs.** Rule added to CLAUDE.md rule 12; `.claude/settings.json` sets `attribution` to empty strings with `sessionUrl: false` (object form, because older Claude Code versions reject a bare boolean and then ignore the whole file). `.claude/settings.local.json` is gitignored.
-- **GitHub repo is private** (`rithika-sr/agentic-retrieval-lab`) until the README has real results.
+- **GitHub repo is public** (`rithika-sr/agentic-retrieval-lab`); it was private during M0–M1.
 - Commit author is `rithika-sr <torits0311@gmail.com>` (personal email, chosen to outlive the university address).
 
 **Surprises and how we handled them**
@@ -128,3 +128,48 @@ _Numbers from `results/foundation/2026-10-08_bm25/` (`bm25_exactness_500000.json
 **Tests (checkpoint 6):** 103 pass, ruff clean. New: `test_leak_v3.py`, `test_bm25.py` (incl. bit-exactness vs stock bm25s), `test_pool.py`, `test_corpus.py` (toy invariants + seeded determinism), `test_corpus_file.py` (real-file invariants: size == target, unique ids, all positives tagged `positive`, no empty text). The last one **skips** when `data/` is not built, e.g. on a fresh clone.
 
 **Spend this session:** $0.0163 (answers, 20) + $0.1663 (answers, 300) = $0.18, from run output. M1 total ≈ $0.68. BM25, pools, and corpus are free.
+
+## 2026-11-23 — M2 part A: evaluation harness, BM25 on the subcorpus, length check
+_Numbers from `results/m2/2026-11-23_bm25_subcorpus/` (`metrics.json`, `length_check.json`, `per_query.csv`, `run.log`). No API calls, no downloads, no dense models._
+
+**Harness.** `arl.eval.metrics` (own code): Recall@100, MRR@10, binary nDCG@10, first-positive rank, and a paired bootstrap (10,000 resamples, seed 42, percentile 95% CI). Human-query means match `ranx` 0.3.21 to 4 decimals (`metrics.json`, `ranx_cross_check_human`).
+- Decisions: agent queries are scored against their **parent's** official qrels. BM25 retrieves top 1,000 (`retrievers.top_k`); zero-score hits are dropped (none of the 1,500 queries had fewer than 100 matching passages). The subcorpus's MS MARCO ids are not 0..N-1, so the index is built on positions and mapped back.
+- Recall@100 is per query (share of that query's positives in the top 100), so with 1.06 positives per query on average it is close to, but not the same as, the pool "hit rate" from M1.
+
+**BM25 on the 200k subcorpus** (`metrics.json`): Recall@100 human 0.6422, primary 0.5922, support 0.3807; MRR@10 0.1772 / 0.1642 / 0.0819; nDCG@10 0.2129 / 0.1949 / 0.1011.
+- Human Recall@100 on the subcorpus (0.6422) is almost the same as the full-collection hit rate (0.6367). Expected: the subcorpus contains every passage that was in BM25's full-collection top 100 for every query variant, so BM25's hardest distractors are all still there. **The subcorpus is about as hard as the full collection for BM25, by construction. It will probably be easier for dense models** (known bias from 2026-10-05).
+- Paired, human − primary: Recall@100 +0.050 [95% CI 0.0067, 0.0933]; MRR@10 +0.013 [−0.0073, 0.0337] (CI includes 0). Human − mean of supports: Recall@100 +0.2615 [0.2093, 0.3144]. Supports are *meant* to find other material, so low recall against the parent's single positive is not a failure by itself (Exp 1 needs deeper labels).
+
+**Length check** (`length_check.json`): 196 of 300 human queries have a positive in BM25's subcorpus top 100. Re-ranking those 100 candidates by length only (shortest first) gives MRR@10 0.0483, vs 0.0277 for random order (100 seeds each). Paired difference +0.0206, 95% CI [0.0036, 0.0408]. Inside these candidate sets, positives average 56.3 words (median 50) vs 64.47 (median 56) for non-positives.
+- Reading: length carries a **small but real** signal, as the M1 corpus stats suggested. It is tiny next to BM25 itself (MRR@10 0.2712 on the same 196 queries). For M2 part B, a retriever that prefers short passages gets a small free boost on this corpus. A length-matched control would be needed to rule that out.
+- Design choice: length ties (common, since many passages have ~50 words) are broken randomly with the same seeds rather than by BM25 rank, so no BM25 information leaks into the "length only" ranking.
+- Rough sanity: random MRR@10 with one positive in 100 candidates is about 0.029 in theory. The measured 0.0277 fits.
+
+**Runtime** (`run.log`): 9.6 s wall clock for everything (BM25 index + search over 1,500 queries 4.5 s). Built in memory; nothing saved to `data/`.
+
+**Tests:** 119 pass (+16: `test_metrics.py`, `test_length_check.py`), ruff clean. ranx emits a harmless numba `NumbaTypeSafetyWarning` in the cross-check test.
+
+**Process note:** the predict-first step was skipped. Rithika asked for the full run in one go; a 20-query smoke run (nothing written) came first.
+
+## 2026-11-23 — M2 part B: dense retrievers (bge-small, e5-small) and BM25 + bge RRF hybrid
+_Numbers from `results/m2/2026-11-23_dense_bge-small-en-v1.5/`, `2026-11-23_dense_e5-small-v2/`, `2026-11-23_hybrid_bm25_bge/` (`metrics.json`, `length_top10.json`, `run.log`) unless marked as console output. No API calls._
+
+**Setup.** sentence-transformers on MPS, normalized embeddings, exact `faiss.IndexFlatIP`, top 1000, max_seq_length 256. Prefixes from the model cards: bge queries get "Represent this sentence for searching relevant passages: ", passages none; e5 uses "query: " / "passage: ". Passage embeddings cached at `data/processed/embeddings/<model>.npy` (307 MB each, gitignored by `data/processed/*` and `*.npy`) with a fingerprint (model, prefix, max length, sha256 of doc ids); a mismatched cache is refused. TREC runs saved to `data/processed/runs/` for fusion. Shared scoring code moved to `arl.eval.common`; the BM25 re-run inside each dense eval matches the saved BM25 results on 1500/1500 queries.
+
+**Encoding time:** timing smoke run 489 passages/s on 2,000 (console), est. 6.8 min/model. Full: bge 441.7 s (453/s), e5 468.3 s (427/s). Eval after caching: ~13 s.
+
+**Crash and fix (faiss + torch OpenMP).** Multi-threaded faiss search segfaulted whenever torch was loaded in the same process (macOS crash reports `Python-2026-11-23-134658.ips`, `-134711.ips` from pytest runs, `-135336.ips` from the first bge smoke run; faulting thread in `libomp.dylib __kmp_suspend_initialize_thread`, called from `libfaiss.dylib`; three `libomp.dylib` copies loaded: torch, faiss, and one other). Fix: `faiss.omp_set_num_threads(1)` in `arl.retrievers.dense.search` (not `KMP_DUPLICATE_LIB_OK`). Checked in a torch-free process that 1-thread and 10-thread search give identical top-1000 positions and scores (max diff 0.0) on random 200k×384 vectors (1,500 queries) and on the real bge vectors (300 queries) (console). No crash after the fix: pytest passed 3 runs in a row; all full runs exited 0.
+
+**Results (Recall@100 / MRR@10 / nDCG@10):**
+- human: BM25 0.6422 / 0.1772 / 0.2129; bge 0.9633 / 0.3872 / 0.4519; e5 0.9622 / 0.4047 / 0.4699; hybrid 0.9439 / 0.2810 / 0.3290
+- primary: BM25 0.5922 / 0.1642 / 0.1949; bge 0.9489 / 0.3408 / 0.4116; e5 0.9522 / 0.3809 / 0.4438; hybrid 0.9289 / 0.2437 / 0.2921
+- support: BM25 0.3807 / 0.0819 / 0.1011; bge 0.8069 / 0.1930 / 0.2401; e5 0.8019 / 0.1952 / 0.2439; hybrid 0.7419 / 0.1272 / 0.1550
+- Dense − BM25 is large and positive for every type and metric (all CIs exclude 0). Hybrid beats BM25 but is **below bge alone** on every type (e.g. human MRR@10 −0.1062 [−0.1462, −0.0669]).
+
+**Why this is not a fair "dense beats BM25" result (the known bias, now measured).** The subcorpus is BM25's full-collection top 100 for every query variant + random backfill. Every passage that confuses BM25 is in it, but the passages that would confuse a dense model are mostly not. So BM25 is about as hard-pressed as on the full 8.8M (human Recall@100 0.6422 vs 0.6367), while the dense models face mostly BM25-style and random distractors. A Recall@100 of 0.96 almost certainly overstates full-collection dense recall. The hybrid result inherits the same bias: fusing in a weak ranker drags down a strong one. **Do not read Exp 2 (does BM25 earn its seat) from this corpus yet.** It needs dense-pooled distractors or a random-subcorpus comparison (FRICTIONAL 2026-10-05; brief Exp 1 stretch).
+
+**Length diagnostic** (`length_top10.json`, human queries): mean words in the top 10, BM25 66.3, bge 56.29 (diff −10.01 [−11.40, −8.66]), e5 55.75 (−10.55 [−11.90, −9.21]). References: whole subcorpus 60.59, official positives 54.17. Dense top-10s look like positives in length, and BM25 top-10s look like its own pooled distractors (64.6 words mean, M1). Given the part A length check (shortest-first beats random by +0.0206 MRR@10), some of the dense advantage may be a length effect that the corpus construction rewards. A length-matched control would test this; it has not been run.
+
+**Human vs primary per model** (human − primary): Recall@100 BM25 +0.050 [0.0067, 0.0933], bge +0.0144 [0.0033, 0.0289], e5 +0.0100 [−0.0033, 0.0267], hybrid +0.0150 [−0.0100, 0.0400]. MRR@10 BM25 +0.013 [−0.0073, 0.0337], bge +0.0465 [0.0242, 0.0694], e5 +0.0238 [0.0006, 0.0475], hybrid +0.0373 [0.0124, 0.0629]. Rewording hurts all retrievers a little; the gap shows up in recall for BM25 and in early precision (MRR) for the dense models.
+
+**Process notes:** e5-small-v2 downloaded from the Hugging Face Hub (~134 MB, first use). The first background e5 run was stopped by hand (SIGTERM, no files written) to rerun it in the foreground. That rerun outlived the tool's 10-minute foreground limit and was moved to the background, exit 0. README headline table not updated, on purpose.

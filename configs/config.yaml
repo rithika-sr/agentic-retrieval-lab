@@ -58,6 +58,10 @@ judging:
 eval:
   metrics: [recall@100, recall@1000, ndcg@10, mrr@10]
   primary_metric: recall@100
+  bootstrap_resamples: 10000           # paired bootstrap for metric differences (seed = project.seed)
+  length_check:
+    depth: 100                         # BM25 candidates per human query
+    n_seeds: 100                       # random orders averaged (also length-tie breaking)
 
 analyzer:
   sample_size: 300

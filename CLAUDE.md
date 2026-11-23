@@ -59,4 +59,8 @@ Rithika — MS Data Analytics Engineering student. Comfortable with Python, pand
 - `uv run python scripts/pool_breakdown.py --run-id <id>` — primary-vs-human and leak-vs-no-leak pool coverage (free)
 - `uv run python -m arl.corpus [--limit N] [--ids-only] [--run-id <id>]` — build the 200k subcorpus → `data/processed/corpus.jsonl` (~3.5 min stream; free)
 - `uv run python scripts/summarize_rewrites.py --run-id <id> [--logs ...]` — write rewrite/leak stats + config to `results/foundation/<id>/` (free, refuses to overwrite)
-- `git push` — upload commits to `origin` (GitHub, private); ask first
+- `uv run python -m arl.eval.bm25_subcorpus [--limit N] [--run-id <id>]` — BM25 on the 200k subcorpus for all query variants + length-bias check → `results/m2/<id>/` (~10 s; free)
+- `uv run python -m arl.retrievers.dense time --model <name> --n 2000` — time passage encoding and estimate full-corpus minutes (free)
+- `uv run python -m arl.eval.dense_subcorpus --model <name> [--limit N] [--run-id <id>]` — dense eval vs BM25 + length_top10; first run per model encodes 200k passages (~7.5 min on MPS) into `data/processed/embeddings/`
+- `uv run python -m arl.eval.hybrid --dense <slug> [--limit N] [--run-id <id>]` — RRF of BM25 + a dense run from `data/processed/runs/` (seconds)
+- `git push` — upload commits to `origin` (GitHub, public); ask first

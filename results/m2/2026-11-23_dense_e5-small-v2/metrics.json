@@ -1,0 +1,152 @@
+{
+  "settings": {
+    "model": "intfloat/e5-small-v2",
+    "device": "mps",
+    "query_prefix": "query: ",
+    "passage_prefix": "passage: ",
+    "normalized_embeddings": true,
+    "index": "faiss.IndexFlatIP (exact)",
+    "max_seq_length": 256,
+    "batch_size": 64,
+    "embedding_dim": 384,
+    "top_k": 1000,
+    "limit": null,
+    "corpus": "data/processed/corpus.jsonl",
+    "n_docs": 200000,
+    "qrels": "official MS MARCO dev/small; agent queries use their parent's"
+  },
+  "by_query_type": {
+    "human": {
+      "n": 300,
+      "recall@100": 0.9622,
+      "mrr@10": 0.4047,
+      "ndcg@10": 0.4699,
+      "positive_in_top1000": 0.9967
+    },
+    "primary": {
+      "n": 300,
+      "recall@100": 0.9522,
+      "mrr@10": 0.3809,
+      "ndcg@10": 0.4438,
+      "positive_in_top1000": 0.9967
+    },
+    "support": {
+      "n": 900,
+      "recall@100": 0.8019,
+      "mrr@10": 0.1952,
+      "ndcg@10": 0.2439,
+      "positive_in_top1000": 0.9833
+    }
+  },
+  "paired_differences": {
+    "human_minus_primary": {
+      "recall@100": {
+        "mean_diff": 0.01,
+        "ci_low": -0.0033333333333333335,
+        "ci_high": 0.02666666666666667,
+        "n": 300,
+        "n_resamples": 10000,
+        "seed": 42
+      },
+      "mrr@10": {
+        "mean_diff": 0.023808201058201056,
+        "ci_low": 0.0005699074074074063,
+        "ci_high": 0.047549140211640216,
+        "n": 300,
+        "n_resamples": 10000,
+        "seed": 42
+      },
+      "ndcg@10": {
+        "mean_diff": 0.026055530981603833,
+        "ci_low": 0.005077396021588255,
+        "ci_high": 0.048101390474403254,
+        "n": 300,
+        "n_resamples": 10000,
+        "seed": 42
+      }
+    },
+    "human_minus_support": {
+      "recall@100": {
+        "mean_diff": 0.16037037037037039,
+        "ci_low": 0.1272175925925926,
+        "ci_high": 0.1948194444444444,
+        "n": 300,
+        "n_resamples": 10000,
+        "seed": 42
+      },
+      "mrr@10": {
+        "mean_diff": 0.20949162257495593,
+        "ci_low": 0.17421625881834216,
+        "ci_high": 0.2466828924162257,
+        "n": 300,
+        "n_resamples": 10000,
+        "seed": 42
+      },
+      "ndcg@10": {
+        "mean_diff": 0.22595305193279733,
+        "ci_low": 0.191402598953465,
+        "ci_high": 0.26247243473890325,
+        "n": 300,
+        "n_resamples": 10000,
+        "seed": 42
+      }
+    },
+    "note": "paired by parent; support = mean over that parent's 3 support queries"
+  },
+  "dense_minus_bm25": {
+    "human": {
+      "recall@100": {
+        "mean_diff": 0.32,
+        "ci_low": 0.26666666666666666,
+        "ci_high": 0.37333333333333335,
+        "n": 300,
+        "n_resamples": 10000,
+        "seed": 42
+      },
+      "mrr@10": {
+        "mean_diff": 0.22749206349206352,
+        "ci_low": 0.18410171957671959,
+        "ci_high": 0.2722351521164021,
+        "n": 300,
+        "n_resamples": 10000,
+        "seed": 42
+      }
+    },
+    "primary": {
+      "recall@100": {
+        "mean_diff": 0.36,
+        "ci_low": 0.305,
+        "ci_high": 0.415,
+        "n": 300,
+        "n_resamples": 10000,
+        "seed": 42
+      },
+      "mrr@10": {
+        "mean_diff": 0.21667592592592594,
+        "ci_low": 0.1715032738095238,
+        "ci_high": 0.26200009920634915,
+        "n": 300,
+        "n_resamples": 10000,
+        "seed": 42
+      }
+    },
+    "support": {
+      "recall@100": {
+        "mean_diff": 0.4211111111111111,
+        "ci_low": 0.3888888888888889,
+        "ci_high": 0.4538888888888889,
+        "n": 900,
+        "n_resamples": 10000,
+        "seed": 42
+      },
+      "mrr@10": {
+        "mean_diff": 0.11330335097001763,
+        "ci_low": 0.09403183421516755,
+        "ci_high": 0.1329180004409171,
+        "n": 900,
+        "n_resamples": 10000,
+        "seed": 42
+      }
+    }
+  }
+}
